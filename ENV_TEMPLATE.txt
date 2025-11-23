@@ -1,0 +1,92 @@
+# ============================================
+# ENVIRONMENT CONFIGURATION TEMPLATE
+# ============================================
+# Copy this file to .env and configure your values
+# IMPORTANT: Never commit .env files to version control!
+#
+# INSTRUCCIONES:
+# 1. Copiar este archivo: cp ENV_TEMPLATE.txt .env
+# 2. Asegurarse de que TODAS las variables tengan valores (no dejar vacías)
+# 3. Cambiar las contraseñas en producción
+#
+# NOTA: Si alguna variable está vacía, docker-compose la pasará como cadena vacía ''
+# lo cual puede causar errores. Asegúrese de definir TODAS las variables.
+
+ENVIRONMENT=development
+DEBUG=true
+
+# ============================================
+# DATABASE CONFIGURATION (MySQL/MariaDB)
+# ============================================
+# MYSQL_PORT: Puerto externo para conexiones desde el host (localhost:3307)
+# Las URLs de conexión dentro de Docker usan puerto 3306 (puerto interno del contenedor)
+MYSQL_HOST=mysql-db
+MYSQL_PORT=3307
+MYSQL_ROOT_PASSWORD=RootPass123!
+MYSQL_DATABASE=colombia_green_travel
+MYSQL_USER=appuser
+MYSQL_PASSWORD=AppPass123!
+
+# ============================================
+# LIQUIDACIONES SERVICE
+# ============================================
+# Configuración del servicio de liquidaciones (puerto 8001)
+LIQUIDACIONES_SERVICE_NAME=liquidaciones-service
+LIQUIDACIONES_SERVICE_VERSION=1.0.0
+LIQUIDACIONES_SERVICE_PORT=8001
+LIQUIDACIONES_LOG_LEVEL=INFO
+
+# URL de conexión a la base de datos para liquidaciones-service
+# IMPORTANTE: Usar puerto 3306 (interno de Docker), NO 3307
+LIQUIDACIONES_DATABASE_URL=mysql+pymysql://appuser:AppPass123!@mysql-db:3306/colombia_green_travel?charset=utf8mb4
+
+# ============================================
+# PROVEDORES SERVICE
+# ============================================
+# Configuración del servicio de proveedores (puerto 8002)
+PROVEDORES_SERVICE_NAME=provedores-service
+PROVEDORES_SERVICE_VERSION=1.0.0
+PROVEDORES_SERVICE_PORT=8002
+PROVEDORES_LOG_LEVEL=INFO
+
+# URL de conexión a la base de datos para provedores-service
+# IMPORTANTE: Usar puerto 3306 (interno de Docker), NO 3307
+PROVEDORES_DATABASE_URL=mysql+pymysql://appuser:AppPass123!@mysql-db:3306/colombia_green_travel?charset=utf8mb4
+
+# ============================================
+# FACTURAS SERVICE
+# ============================================
+# Configuración del servicio de facturas (puerto 8003)
+FACTURAS_SERVICE_NAME=facturas-service
+FACTURAS_SERVICE_VERSION=1.0.0
+FACTURAS_SERVICE_PORT=8003
+FACTURAS_LOG_LEVEL=INFO
+
+# URL de conexión a la base de datos para facturas-service
+# IMPORTANTE: Usar puerto 3306 (interno de Docker), NO 3307
+FACTURAS_DATABASE_URL=mysql+pymysql://appuser:AppPass123!@mysql-db:3306/colombia_green_travel?charset=utf8mb4
+
+# ============================================
+# NGINX GATEWAY
+# ============================================
+NGINX_PORT=80
+
+# ============================================
+# DATABASE POOL CONFIGURATION
+# ============================================
+DB_POOL_SIZE=20
+DB_MAX_OVERFLOW=40
+DB_POOL_RECYCLE=1800
+DB_POOL_TIMEOUT=30
+
+# ============================================
+# CORS CONFIGURATION
+# ============================================
+ALLOWED_ORIGINS=*
+
+# ============================================
+# SECURITY (if needed)
+# ============================================
+# JWT_SECRET_KEY=your-secret-key-here
+# JWT_EXPIRE_MINUTES=60
+
