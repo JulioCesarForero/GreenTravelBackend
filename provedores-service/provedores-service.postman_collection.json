@@ -1,0 +1,507 @@
+{
+	"info": {
+		"_postman_id": "provedores-service-collection-2024",
+		"name": "Provedores Service - API Collection",
+		"description": "Colección completa de endpoints para el servicio de proveedores (provedores-service). Incluye todos los métodos CRUD, filtros, paginación y estadísticas.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "provedores-service"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/health",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["health"]
+						},
+						"description": "Health check del servicio de proveedores. Retorna el estado del servicio, versión y ambiente."
+					},
+					"response": []
+				},
+				{
+					"name": "Root Endpoint",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": [""]
+						},
+						"description": "Endpoint raíz con información del servicio de proveedores."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Proveedores - CRUD",
+			"item": [
+				{
+					"name": "Listar Proveedores",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores?page=1&limit=50&search=&estado=&tipo=&ciudad=",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Número de página (inicia en 1)",
+									"disabled": false
+								},
+								{
+									"key": "limit",
+									"value": "50",
+									"description": "Elementos por página (máximo 100)",
+									"disabled": false
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Búsqueda en nombre, razón social, identificación",
+									"disabled": true
+								},
+								{
+									"key": "estado",
+									"value": "",
+									"description": "Filtrar por estado (1=activo, 0=inactivo)",
+									"disabled": true
+								},
+								{
+									"key": "tipo",
+									"value": "",
+									"description": "Filtrar por tipo de proveedor",
+									"disabled": true
+								},
+								{
+									"key": "ciudad",
+									"value": "",
+									"description": "Filtrar por ID de ciudad",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Obtener lista paginada de proveedores con filtros opcionales.\n\n**Parámetros de consulta:**\n- **page**: Número de página (inicia en 1)\n- **limit**: Número de elementos por página (1-100)\n- **search**: Término de búsqueda opcional (busca en nombre, razón social, identificación)\n- **estado**: Filtro por estado (1=activo, 0=inactivo)\n- **tipo**: Filtro por tipo de proveedor\n- **ciudad**: Filtro por ID de ciudad\n\n**Retorna:** Lista de proveedores con metadatos de paginación."
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Proveedores - Con Filtros",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores?page=1&limit=50&search=Hotel&estado=1&tipo=1&ciudad=1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "search",
+									"value": "Hotel",
+									"description": "Búsqueda en nombre, razón social, identificación"
+								},
+								{
+									"key": "estado",
+									"value": "1",
+									"description": "Filtrar por estado (1=activo, 0=inactivo)"
+								},
+								{
+									"key": "tipo",
+									"value": "1",
+									"description": "Filtrar por tipo de proveedor"
+								},
+								{
+									"key": "ciudad",
+									"value": "1",
+									"description": "Filtrar por ID de ciudad"
+								}
+							]
+						},
+						"description": "Ejemplo de listado de proveedores con todos los filtros activos."
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Proveedor por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores", "1"],
+							"variable": [
+								{
+									"key": "provedor_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Obtener un proveedor específico por su identificador único.\n\n**Parámetros de ruta:**\n- **provedor_id**: Identificador único del proveedor\n\n**Retorna:** Detalles del proveedor\n\n**Errores:**\n- **404**: Proveedor no encontrado"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Proveedor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provedor_hotel_code\": 12345,\n  \"provedor_razonsocial\": \"Hotel Ejemplo S.A.\",\n  \"provedor_nombre\": \"Hotel Ejemplo\",\n  \"provedor_identificacion\": \"900123456-7\",\n  \"provedor_direccion\": \"Calle 123 #45-67, Bogotá\",\n  \"provedor_telefono\": \"6012345678\",\n  \"provedor_tipo\": 1,\n  \"provedor_estado\": 1,\n  \"provedor_ciudad\": 1,\n  \"provedor_link_dropbox\": \"https://dropbox.com/proveedor123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores"]
+						},
+						"description": "Crear un nuevo proveedor con los datos proporcionados.\n\n**Cuerpo de la solicitud:**\nTodos los campos son opcionales:\n- **provedor_hotel_code**: Código del hotel del proveedor\n- **provedor_razonsocial**: Razón social del proveedor (máx. 250 caracteres)\n- **provedor_nombre**: Nombre del proveedor (máx. 150 caracteres)\n- **provedor_identificacion**: Identificación del proveedor (máx. 25 caracteres)\n- **provedor_direccion**: Dirección del proveedor (máx. 250 caracteres)\n- **provedor_telefono**: Teléfono del proveedor (máx. 25 caracteres)\n- **provedor_tipo**: Tipo de proveedor\n- **provedor_estado**: Estado (1=activo, 0=inactivo). Por defecto: 1\n- **provedor_ciudad**: ID de la ciudad\n- **provedor_link_dropbox**: Link de Dropbox del proveedor (máx. 500 caracteres)\n\n**Retorna:** Proveedor creado con ID generado (201 Created)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Proveedor - Mínimo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provedor_nombre\": \"Nuevo Proveedor\",\n  \"provedor_estado\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores"]
+						},
+						"description": "Ejemplo de creación de proveedor con campos mínimos requeridos."
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Proveedor",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provedor_nombre\": \"Hotel Ejemplo Actualizado\",\n  \"provedor_telefono\": \"6012345679\",\n  \"provedor_estado\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores", "1"],
+							"variable": [
+								{
+									"key": "provedor_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Actualizar un proveedor existente con nuevos datos.\n\n**Parámetros de ruta:**\n- **provedor_id**: Identificador único del proveedor a actualizar\n\n**Cuerpo de la solicitud:**\nTodos los campos son opcionales. Solo los campos proporcionados serán actualizados:\n- **provedor_hotel_code**: Código del hotel del proveedor\n- **provedor_razonsocial**: Razón social del proveedor (máx. 250 caracteres)\n- **provedor_nombre**: Nombre del proveedor (máx. 150 caracteres)\n- **provedor_identificacion**: Identificación del proveedor (máx. 25 caracteres)\n- **provedor_direccion**: Dirección del proveedor (máx. 250 caracteres)\n- **provedor_telefono**: Teléfono del proveedor (máx. 25 caracteres)\n- **provedor_tipo**: Tipo de proveedor\n- **provedor_estado**: Estado (1=activo, 0=inactivo)\n- **provedor_ciudad**: ID de la ciudad\n- **provedor_link_dropbox**: Link de Dropbox del proveedor (máx. 500 caracteres)\n\n**Retorna:** Datos actualizados del proveedor\n\n**Errores:**\n- **404**: Proveedor no encontrado"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Proveedor - Desactivar",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provedor_estado\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores", "1"],
+							"variable": [
+								{
+									"key": "provedor_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Ejemplo de actualización para desactivar un proveedor (soft delete)."
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Proveedor",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores", "1"],
+							"variable": [
+								{
+									"key": "provedor_id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Eliminar un proveedor (soft delete).\n\n**Parámetros de ruta:**\n- **provedor_id**: Identificador único del proveedor a eliminar\n\n**Nota:**\n- Esto realiza un soft delete (marca provedor_estado=0)\n- El registro permanece en la base de datos\n- Retorna 204 No Content si es exitoso\n\n**Errores:**\n- **404**: Proveedor no encontrado"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Estadísticas",
+			"item": [
+				{
+					"name": "Obtener Estadísticas de Proveedores",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores/stats",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores", "stats"]
+						},
+						"description": "Obtener estadísticas agregadas sobre los proveedores.\n\n**Retorna:**\n- **total**: Total de proveedores\n- **activos**: Proveedores activos (estado=1)\n- **inactivos**: Proveedores inactivos (estado=0)\n- **por_estado**: Conteo agrupado por estado\n- **por_tipo**: Conteo agrupado por tipo"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Casos de Prueba - Validación",
+			"item": [
+				{
+					"name": "Crear Proveedor - Validación Campos",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provedor_nombre\": \"Test\",\n  \"provedor_estado\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores"]
+						},
+						"description": "Prueba de validación: estado debe ser 0 o 1. Este request debería fallar con 422."
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Proveedor - No Existente",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores/99999",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores", "99999"]
+						},
+						"description": "Prueba de error 404: obtener un proveedor que no existe."
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Proveedores - Paginación Inválida",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8002/api/v1/provedores?page=0&limit=200",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8002",
+							"path": ["api", "v1", "provedores"],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"description": "Página inválida (debe ser >= 1)"
+								},
+								{
+									"key": "limit",
+									"value": "200",
+									"description": "Límite inválido (máximo 100)"
+								}
+							]
+						},
+						"description": "Prueba de validación: página debe ser >= 1 y límite <= 100. Este request debería fallar con 422."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8002",
+			"type": "string"
+		},
+		{
+			"key": "api_version",
+			"value": "v1",
+			"type": "string"
+		}
+	]
+}
+

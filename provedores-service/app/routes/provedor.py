@@ -85,6 +85,42 @@ async def get_provedores(
 
 
 # ============================================
+# GET STATISTICS (debe ir ANTES de la ruta con parámetro)
+# ============================================
+
+@router.get(
+    "/provedores/stats",
+    response_model=ProvedorStatsResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Obtener estadísticas de proveedores",
+    description="Obtener estadísticas agregadas sobre los proveedores",
+    response_description="Estadísticas incluyendo conteos por estado y tipo"
+)
+async def get_provedor_stats(
+    db: Session = Depends(get_db)
+):
+    """
+    Obtener estadísticas sobre proveedores.
+    
+    **Retorna:**
+    - Conteo total
+    - Conteos activos/inactivos
+    - Conteos por estado
+    - Conteos por tipo
+    """
+    try:
+        service = ProvedorService(db)
+        stats = service.get_stats()
+        return stats
+    except Exception as e:
+        logger.error(f"Error in get_provedor_stats: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error interno del servidor al obtener estadísticas"
+        )
+
+
+# ============================================
 # GET SINGLE PROVEDOR
 # ============================================
 
@@ -286,41 +322,5 @@ async def delete_provedor(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error interno del servidor al eliminar proveedor"
-        )
-
-
-# ============================================
-# GET STATISTICS
-# ============================================
-
-@router.get(
-    "/provedores/stats",
-    response_model=ProvedorStatsResponse,
-    status_code=status.HTTP_200_OK,
-    summary="Obtener estadísticas de proveedores",
-    description="Obtener estadísticas agregadas sobre los proveedores",
-    response_description="Estadísticas incluyendo conteos por estado y tipo"
-)
-async def get_provedor_stats(
-    db: Session = Depends(get_db)
-):
-    """
-    Obtener estadísticas sobre proveedores.
-    
-    **Retorna:**
-    - Conteo total
-    - Conteos activos/inactivos
-    - Conteos por estado
-    - Conteos por tipo
-    """
-    try:
-        service = ProvedorService(db)
-        stats = service.get_stats()
-        return stats
-    except Exception as e:
-        logger.error(f"Error in get_provedor_stats: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error interno del servidor al obtener estadísticas"
         )
 

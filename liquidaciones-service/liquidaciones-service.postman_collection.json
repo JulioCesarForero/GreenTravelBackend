@@ -1,0 +1,263 @@
+{
+	"info": {
+		"_postman_id": "liquidaciones-service-collection-001",
+		"name": "Liquidaciones Service API",
+		"description": "Colección completa de endpoints para el servicio de Liquidaciones (puerto 8001)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "liquidaciones-service"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						},
+						"description": "Health check del servicio de liquidaciones. Retorna el estado del servicio, versión y ambiente."
+					},
+					"response": []
+				},
+				{
+					"name": "Root Endpoint",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"],
+							"path": [""]
+						},
+						"description": "Endpoint raíz con información del servicio de liquidaciones."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Liquidaciones",
+			"item": [
+				{
+					"name": "Listar Liquidaciones",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/liquidaciones?page=1&limit=50&search=&estado=&id_reserva=&factura=",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "liquidaciones"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Número de página (inicia en 1)",
+									"disabled": false
+								},
+								{
+									"key": "limit",
+									"value": "50",
+									"description": "Elementos por página (máximo 100)",
+									"disabled": false
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Búsqueda en nombre empresa, pasajero, asesor",
+									"disabled": true
+								},
+								{
+									"key": "estado",
+									"value": "",
+									"description": "Filtrar por estado (1=activo, 0=inactivo)",
+									"disabled": true
+								},
+								{
+									"key": "id_reserva",
+									"value": "",
+									"description": "Filtrar por ID de reserva",
+									"disabled": true
+								},
+								{
+									"key": "factura",
+									"value": "",
+									"description": "Filtrar por número de factura",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Obtener lista paginada de liquidaciones con filtros opcionales.\n\n**Parámetros de consulta:**\n- `page`: Número de página (inicia en 1)\n- `limit`: Número de elementos por página (1-100)\n- `search`: Término de búsqueda opcional en nombre empresa, pasajero, asesor\n- `estado`: Filtro por estado (1=activo, 0=inactivo)\n- `id_reserva`: Filtro por ID de reserva\n- `factura`: Filtro por número de factura\n\n**Retorna:** Lista de liquidaciones con metadatos de paginación."
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Liquidación por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/liquidaciones/{{liquidacion_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "liquidaciones", "{{liquidacion_id}}"],
+							"variable": [
+								{
+									"key": "liquidacion_id",
+									"value": "1",
+									"description": "ID de la liquidación"
+								}
+							]
+						},
+						"description": "Obtener una liquidación específica por su identificador único.\n\n**Parámetros de ruta:**\n- `liquidacion_id`: Identificador único de la liquidación\n\n**Retorna:** Detalles completos de la liquidación.\n\n**Errores:**\n- `404`: Liquidación no encontrada"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Liquidación",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_reserva\": 123,\n  \"nombre_asesor\": \"Juan Pérez\",\n  \"nombre_empresa\": \"Empresa Ejemplo S.A.\",\n  \"nit_empresa\": \"900123456-7\",\n  \"direccion_empresa\": \"Calle 123 #45-67\",\n  \"telefono_empresa\": \"6012345678\",\n  \"observaciones\": \"Liquidación de prueba\",\n  \"servicio\": \"Hotel\",\n  \"fecha_servicio\": \"2025-01-15\",\n  \"incluye_servicio\": \"Desayuno, WiFi\",\n  \"numero_pasajeros\": 2,\n  \"valor_liquidacion\": \"500000\",\n  \"iva\": 19,\n  \"valor_iva\": \"95000\",\n  \"valor_total_iva\": \"595000\",\n  \"nombre_pasajero\": \"María García\",\n  \"fecha\": \"2025-01-10\",\n  \"factura\": 1001,\n  \"estado\": 1,\n  \"origen_venta\": \"Web\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/liquidaciones",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "liquidaciones"]
+						},
+						"description": "Crear una nueva liquidación con los datos proporcionados.\n\n**Cuerpo de la solicitud:**\n- `observaciones`: Campo requerido (string)\n- Todos los demás campos son opcionales\n\n**Campos disponibles:**\n- `id_reserva`: ID de la reserva (integer)\n- `nombre_asesor`: Nombre del asesor (string, max 150)\n- `nombre_empresa`: Nombre de la empresa (string, max 150)\n- `nit_empresa`: NIT de la empresa (string, max 25)\n- `direccion_empresa`: Dirección de la empresa (string, max 150)\n- `telefono_empresa`: Teléfono de la empresa (string, max 15)\n- `observaciones`: Observaciones (string, requerido)\n- `servicio`: Tipo de servicio (string, max 100)\n- `fecha_servicio`: Fecha del servicio (string, max 25)\n- `incluye_servicio`: Incluye del servicio (string, max 100)\n- `numero_pasajeros`: Número de pasajeros (integer, >= 0)\n- `valor_liquidacion`: Valor de la liquidación (string, max 50)\n- `iva`: Porcentaje de IVA (integer, 0-100)\n- `valor_iva`: Valor del IVA (string, max 50)\n- `valor_total_iva`: Valor total con IVA (string, max 50)\n- `nombre_pasajero`: Nombre del pasajero (string, max 150)\n- `fecha`: Fecha de la liquidación (string, max 25)\n- `factura`: Número de factura (integer)\n- `estado`: Estado (integer, 0=inactivo, 1=activo, default: 1)\n- `origen_venta`: Origen de la venta (string, max 75)\n\n**Retorna:** Liquidación creada con ID generado.\n\n**Códigos de estado:**\n- `201`: Liquidación creada exitosamente\n- `400`: Datos de solicitud inválidos\n- `500`: Error interno del servidor"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Liquidación",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"observaciones\": \"Liquidación actualizada\",\n  \"estado\": 1,\n  \"valor_liquidacion\": \"600000\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/liquidaciones/{{liquidacion_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "liquidaciones", "{{liquidacion_id}}"],
+							"variable": [
+								{
+									"key": "liquidacion_id",
+									"value": "1",
+									"description": "ID de la liquidación"
+								}
+							]
+						},
+						"description": "Actualizar una liquidación existente con nuevos datos.\n\n**Parámetros de ruta:**\n- `liquidacion_id`: Identificador único de la liquidación a actualizar\n\n**Cuerpo de la solicitud:**\n- Todos los campos son opcionales\n- Solo los campos proporcionados serán actualizados\n\n**Campos disponibles:** (mismos que en crear liquidación)\n- Todos los campos son opcionales en la actualización\n\n**Retorna:** Datos actualizados de la liquidación.\n\n**Errores:**\n- `404`: Liquidación no encontrada\n- `500`: Error interno del servidor"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Liquidación",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/liquidaciones/{{liquidacion_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "liquidaciones", "{{liquidacion_id}}"],
+							"variable": [
+								{
+									"key": "liquidacion_id",
+									"value": "1",
+									"description": "ID de la liquidación"
+								}
+							]
+						},
+						"description": "Eliminar una liquidación (soft delete - marca como inactiva).\n\n**Parámetros de ruta:**\n- `liquidacion_id`: Identificador único de la liquidación a eliminar\n\n**Nota:**\n- Esta operación realiza un soft delete, marcando la liquidación como inactiva (estado=0)\n- La liquidación no se elimina físicamente de la base de datos\n\n**Retorna:**\n- `204 No Content` si la eliminación fue exitosa\n\n**Errores:**\n- `404`: Liquidación no encontrada\n- `500`: Error interno del servidor"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Estadísticas de Liquidaciones",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/liquidaciones/stats",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "liquidaciones", "stats"]
+						},
+						"description": "Obtener estadísticas agregadas sobre las liquidaciones.\n\n**Retorna:**\n- Conteo total de liquidaciones\n- Conteos de liquidaciones activas/inactivas\n- Conteos por estado\n- Otras estadísticas agregadas\n\n**Códigos de estado:**\n- `200`: Estadísticas obtenidas exitosamente\n- `500`: Error interno del servidor"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8001",
+			"type": "string",
+			"description": "URL base del servicio de liquidaciones"
+		},
+		{
+			"key": "liquidacion_id",
+			"value": "1",
+			"type": "string",
+			"description": "ID de liquidación para pruebas"
+		}
+	]
+}
+

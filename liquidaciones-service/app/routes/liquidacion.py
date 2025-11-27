@@ -85,6 +85,41 @@ async def get_liquidaciones(
 
 
 # ============================================
+# GET STATISTICS (debe ir ANTES de la ruta con parámetro)
+# ============================================
+
+@router.get(
+    "/liquidaciones/stats",
+    response_model=LiquidacionStatsResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Obtener estadísticas de liquidaciones",
+    description="Obtener estadísticas agregadas sobre las liquidaciones",
+    response_description="Estadísticas incluyendo conteos por estado"
+)
+async def get_liquidacion_stats(
+    db: Session = Depends(get_db)
+):
+    """
+    Obtener estadísticas sobre liquidaciones.
+    
+    **Retorna:**
+    - Conteo total
+    - Conteos activas/inactivas
+    - Conteos por estado
+    """
+    try:
+        service = LiquidacionService(db)
+        stats = service.get_stats()
+        return stats
+    except Exception as e:
+        logger.error(f"Error in get_liquidacion_stats: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error interno del servidor al obtener estadísticas"
+        )
+
+
+# ============================================
 # GET SINGLE LIQUIDACION
 # ============================================
 
@@ -286,40 +321,5 @@ async def delete_liquidacion(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error interno del servidor al eliminar liquidación"
-        )
-
-
-# ============================================
-# GET STATISTICS
-# ============================================
-
-@router.get(
-    "/liquidaciones/stats",
-    response_model=LiquidacionStatsResponse,
-    status_code=status.HTTP_200_OK,
-    summary="Obtener estadísticas de liquidaciones",
-    description="Obtener estadísticas agregadas sobre las liquidaciones",
-    response_description="Estadísticas incluyendo conteos por estado"
-)
-async def get_liquidacion_stats(
-    db: Session = Depends(get_db)
-):
-    """
-    Obtener estadísticas sobre liquidaciones.
-    
-    **Retorna:**
-    - Conteo total
-    - Conteos activas/inactivas
-    - Conteos por estado
-    """
-    try:
-        service = LiquidacionService(db)
-        stats = service.get_stats()
-        return stats
-    except Exception as e:
-        logger.error(f"Error in get_liquidacion_stats: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error interno del servidor al obtener estadísticas"
         )
 
